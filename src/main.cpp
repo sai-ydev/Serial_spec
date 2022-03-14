@@ -1,11 +1,11 @@
-#include <Arduino.h>
 #include "TaskScheduler.h"
+#include "serial_parser.h"
 
-void t1Callback();
-
-Task t1(1000, TASK_FOREVER, &t1Callback);
+//serial port parser
+Task serial_task(TASK_MILLISECOND, TASK_FOREVER, &parse_message);
 
 Scheduler scheduler;
+
 
 void setup()
 {
@@ -13,6 +13,10 @@ void setup()
   Serial.begin(1000000);
 
   scheduler.init();
+  scheduler.addTask(serial_task);
+
+
+  serial_task.enable();
 
   // enable watchdog
 }
